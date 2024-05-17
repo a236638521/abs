@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.admin.mapper.MiddleNumberPoolMapper">
+    <select id="findByPage" resultType="com.m7.abs.admin.domain.dto.MiddleNumberPoolPageDTO">
+        SELECT
+        numPool.*,
+        account.name AS accountName,
+        channel.name AS channelName
+        FROM
+        middle_number_pool numPool
+        LEFT JOIN account account ON account.id= numPool.account_id AND account.deleted = 0
+        LEFT JOIN channel channel ON channel.id= numPool.channel_id AND channel.deleted = 0
+        <where>
+            numPool.deleted = 0
+            <foreach collection="conditions" item="condition">
+                AND numPool.${condition.column} ${condition.operator} #{condition.value}
+            </foreach>
+        </where>
+        ORDER BY
+        numPool.create_time DESC
+    </select>
+
+</mapper>

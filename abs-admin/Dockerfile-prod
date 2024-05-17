@@ -1,0 +1,22 @@
+FROM harbor-test.7moor.com:8443/base/openjdk8-openj9:alpine
+
+COPY target/*.jar /app/abs-admin.jar
+
+ENV SERVER_PORT=35604 \
+    NACOS_DISCOVERY_ADDR=http://192.168.200.149:8848 \
+    NACOS_CONFIG_ADDR=http://192.168.200.149:8848:8848 \
+    NACOS_DISCOVERY_NAME_SPACE=4cdc4c26-1f57-4901-a344-98607eba3b16 \
+    NACOS_CONFIG_GROUP=release \
+    NACOS_PROFILES_ACTIVE=release \
+    NACOS_DISCOVERY_WEIGHT=1
+
+EXPOSE ${SERVER_PORT}
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apk del tzdata
+
+RUN /bin/sh -c 'java -Xshareclasses -Xquickstart -jar /app/abs-admin.jar &' ; sleep 25 ; ps aux | grep java | grep abs-admin | awk '{print $1}' | xargs kill -1
+
+CMD ["sh", "-c", "java ${JAVA_OPTIONS} -jar /app/abs-admin.jar"]
+

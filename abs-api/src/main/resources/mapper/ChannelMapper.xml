@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.api.mapper.ChannelMapper">
+    <select id="getChannelConfigInfo" resultType="com.m7.abs.api.domain.dto.ChannelConfigDto">
+        SELECT cc.env          AS env,
+               cc.HOST         AS HOST,
+               cc.port         AS port,
+               cc.context_path AS contextPath,
+               cc.https        AS https,
+               C.ID            AS channelId,
+               C.code          AS channelCode,
+               acc.app_id     AS appId,
+               acc.access_key     AS accessKey,
+               acc.secret_key  AS secretKey
+        FROM channel_conf AS cc
+                 LEFT JOIN channel AS C ON C.ID = cc.channel_id
+                 LEFT JOIN account_channel_conf AS acc ON acc.channel_id = cc.channel_id
+            AND acc.deleted = 0
+            AND acc.account_id = #{accountId}
+            AND acc.status = 1
+        WHERE cc.status = 1
+          AND cc.deleted = 0
+          AND cc.channel_id = #{channelId} LIMIT 1
+    </select>
+
+    <select id="getChannelConfigInfoByAccountAndChannelCode" resultType="com.m7.abs.api.domain.dto.ChannelConfigDto">
+        SELECT
+            cc.env AS env,
+            cc.HOST AS HOST,
+            cc.port AS port,
+            cc.context_path AS contextPath,
+            cc.https AS https,
+            C.ID AS channelId,
+            C.code AS channelCode,
+            acc.app_id     AS appId,
+            acc.access_key AS accessKey,
+            acc.secret_key AS secretKey
+        FROM
+            channel_conf AS cc
+                LEFT JOIN channel AS C ON C.ID = cc.channel_id
+                AND C.deleted = 0
+                LEFT JOIN account_channel_conf AS acc ON acc.channel_id = cc.channel_id
+                AND acc.deleted = 0
+                AND acc.status = 1
+                LEFT JOIN account AS account ON account.ID = acc.account_id
+                AND account.status = 1
+                AND account.deleted = 0
+        WHERE
+            cc.status = 1
+          AND cc.deleted = 0
+          AND C.code = #{channelCode}
+          AND account.bill_account_id = #{account}
+        LIMIT 1
+    </select>
+
+    <select id="getChannelConfigInfoByAccount" resultType="com.m7.abs.api.domain.dto.ChannelConfigDto">
+        SELECT
+            cc.env AS env,
+            cc.HOST AS HOST,
+            cc.port AS port,
+            cc.context_path AS contextPath,
+            cc.https AS https,
+            C.ID AS channelId,
+            C.code AS channelCode,
+            acc.app_id     AS appId,
+            acc.access_key AS accessKey,
+            acc.secret_key AS secretKey
+        FROM
+            channel_conf AS cc
+                LEFT JOIN channel AS C ON C.ID = cc.channel_id
+                AND C.deleted = 0
+                LEFT JOIN account_channel_conf AS acc ON acc.channel_id = cc.channel_id
+                AND acc.deleted = 0
+                AND acc.status = 1
+                LEFT JOIN account AS account ON account.ID = acc.account_id
+                AND account.status = 1
+                AND account.deleted = 0
+        WHERE
+            cc.status = 1
+          AND cc.deleted = 0
+          AND account.bill_account_id = #{account}
+    </select>
+
+</mapper>

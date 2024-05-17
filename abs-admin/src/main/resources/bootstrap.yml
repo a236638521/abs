@@ -1,0 +1,49 @@
+server:
+  port: ${SERVER_PORT:35604}
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /admin
+    servlet-path: /
+
+spring:
+  freemarker:
+    suffix: .ftl
+  application:
+    name: abs-admin-${NACOS_PROFILES_ACTIVE}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_ADDR}
+        weight: ${NACOS_DISCOVERY_WEIGHT}
+        namespace: ${NACOS_DISCOVERY_NAME_SPACE}
+      config:
+        server-addr: ${NACOS_CONFIG_ADDR}
+        group: ${NACOS_CONFIG_GROUP}
+        file-extension: yml
+        namespace: ${NACOS_DISCOVERY_NAME_SPACE}
+  profiles:
+    active: ${NACOS_PROFILES_ACTIVE}
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: ready
+      exposure:
+        include: health,info,metrics,prometheus
+mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-enums-package: com.m7.abs.common.constant.common
+
+feign:
+  hystrix:
+    enabled: false
+  httpclient:
+    connection-timeout: 10000
+  client:
+    config:
+      default:
+        retryer: feign.Retryer.Default

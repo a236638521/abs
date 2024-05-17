@@ -1,0 +1,23 @@
+image:
+  repository: v7-harbor.7moor.com/tonghua/abs-admin
+  tag: ""
+
+imagePullSecrets:
+  - name: tx-harbor
+
+# 环境变量
+env:
+  - name: JAVA_OPTIONS
+    value: "-Xshareclasses -Xquickstart"
+  - name: NACOS_DISCOVERY_ADDR
+    value: http://192.168.200.149:8848
+  - name: NACOS_CONFIG_ADDR
+    value: http://192.168.200.149:8848
+  - name: NACOS_CONFIG_GROUP
+    value: release
+  - name: NACOS_PROFILES_ACTIVE
+    value: release
+  - name: NACOS_DISCOVERY_WEIGHT
+    value: "1"
+  - name: NACOS_DISCOVERY_NAME_SPACE
+    value: "4cdc4c26-1f57-4901-a344-98607eba3b16"

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.reportexport.mapper.MiddleNumberCdrMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.m7.abs.common.domain.entity.MiddleNumberCdrEntity">
+        <result column="id" property="id"/>
+        <result column="account_id" property="accountId"/>
+        <result column="mapping_id" property="mappingId"/>
+        <result column="tel_x" property="telX"/>
+        <result column="caller" property="caller"/>
+        <result column="callee" property="callee"/>
+        <result column="call_recording" property="callRecording"/>
+        <result column="create_time" property="createTime"/>
+        <result column="result" property="result"/>
+        <result column="call_display" property="callDisplay"/>
+        <result column="caller_show" property="callerShow"/>
+        <result column="called_show" property="calledShow"/>
+        <result column="caller_area" property="callerArea"/>
+        <result column="called_area" property="calledArea"/>
+        <result column="bill_duration" property="billDuration"/>
+        <result column="begin_time" property="beginTime"/>
+        <result column="alerting_time" property="alertingTime"/>
+        <result column="connect_time" property="connectTime"/>
+        <result column="release_time" property="releaseTime"/>
+        <result column="record_file_host" property="recordFileHost"/>
+        <result column="record_file_path" property="recordFilePath"/>
+        <result column="oss_task_id" property="ossTaskId"/>
+        <result column="cdr_push_task_id" property="cdrPushTaskId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , account_id, mapping_id, tel_x, caller, callee, call_recording, create_time, result, call_display, caller_show, called_show, caller_area, called_area, bill_duration, begin_time, alerting_time, connect_time, release_time, record_file_host, record_file_path, oss_task_id, cdr_push_task_id
+    </sql>
+
+    <select id="streamByExample" fetchSize="50" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM middle_number_cdr
+        LIMIT 5000;
+    </select>
+
+</mapper>

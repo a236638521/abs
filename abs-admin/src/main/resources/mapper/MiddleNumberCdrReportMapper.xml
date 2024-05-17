@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.admin.mapper.MiddleNumberCdrReportMapper">
+    <select id="selectReportByHour" parameterType="com.m7.abs.admin.domain.vo.report.ReportSearchVO"
+            resultType="com.m7.abs.admin.domain.dto.MidNumReportDTO">
+        SELECT
+        date_time AS dateTimeStr,
+        call_count,
+        call_complete,
+        call_fail,
+        bill_duration_count,
+        rate_duration_count,
+        called_carrier_unicom,
+        called_carrier_telecom,
+        called_carrier_mobile,
+        called_carrier_unknown
+        FROM
+        middle_number_cdr_report
+        <where>
+            <if test="ew.emptyOfWhere == false">
+                AND ${ew.sqlSegment}
+            </if>
+        </where>
+        ORDER BY date_time DESC
+    </select>
+
+    <select id="selectReportByDay" parameterType="com.m7.abs.admin.domain.vo.report.ReportSearchVO"
+            resultType="com.m7.abs.admin.domain.dto.MidNumReportDTO">
+        SELECT
+            SUBSTRING( date_time, 0, 11 ) AS dateTimeStr,
+            SUM(call_count) AS call_count,
+            SUM(call_complete) AS call_complete,
+            SUM(call_fail) AS call_fail,
+            SUM(bill_duration_count) AS bill_duration_count,
+            SUM(rate_duration_count) AS rate_duration_count,
+            SUM(called_carrier_unicom) AS called_carrier_unicom,
+            SUM(called_carrier_telecom) AS called_carrier_telecom,
+            SUM(called_carrier_mobile) AS called_carrier_mobile,
+            SUM(called_carrier_unknown) AS called_carrier_unknown
+        FROM
+            middle_number_cdr_report
+        <where>
+            <if test="ew.emptyOfWhere == false">
+                AND ${ew.sqlSegment}
+            </if>
+        </where>
+        GROUP BY dateTimeStr
+        ORDER BY dateTimeStr DESC
+    </select>
+
+    <select id="selectReportByMonth" parameterType="com.m7.abs.admin.domain.vo.report.ReportSearchVO"
+            resultType="com.m7.abs.admin.domain.dto.MidNumReportDTO">
+        SELECT
+            SUBSTRING( date_time, 0, 8 ) AS dateTimeStr,
+            SUM(call_count) AS call_count,
+            SUM(call_complete) AS call_complete,
+            SUM(call_fail) AS call_fail,
+            SUM(bill_duration_count) AS bill_duration_count,
+            SUM(rate_duration_count) AS rate_duration_count,
+            SUM(called_carrier_unicom) AS called_carrier_unicom,
+            SUM(called_carrier_telecom) AS called_carrier_telecom,
+            SUM(called_carrier_mobile) AS called_carrier_mobile,
+            SUM(called_carrier_unknown) AS called_carrier_unknown
+        FROM
+            middle_number_cdr_report
+        <where>
+            <if test="ew.emptyOfWhere == false">
+                AND ${ew.sqlSegment}
+            </if>
+        </where>
+        GROUP BY dateTimeStr
+        ORDER BY dateTimeStr DESC
+    </select>
+</mapper>

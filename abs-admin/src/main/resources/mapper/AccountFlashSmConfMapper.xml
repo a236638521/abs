@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.admin.mapper.AccountFlashSmConfMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.m7.abs.common.domain.entity.AccountFlashSmConfEntity">
+    <result column="id" property="id" />
+        <result column="account_id" property="accountId" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="status" property="status" />
+        <result column="deleted" property="deleted" />
+        <result column="flash_sm_template_id" property="flashSmTemplateId" />
+        <result column="flash_sm_account_id" property="flashSmAccountId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        account_id, create_by, create_time, status, deleted, flash_sm_template_id, flash_sm_account_id
+    </sql>
+
+</mapper>

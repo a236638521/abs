@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.api.mapper.FlashSmTemplateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.m7.abs.common.domain.entity.FlashSmTemplateEntity">
+        <result column="id" property="id"/>
+        <result column="display_name" property="displayName"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="account_id" property="accountId"/>
+        <result column="content" property="content"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_update_time" property="lastUpdateTime"/>
+        <result column="template_number" property="templateNumber"/>
+        <result column="deleted" property="deleted"/>
+        <result column="reason" property="reason"/>
+        <result column="params" property="params"/>
+        <result column="scene_description" property="sceneDescription"/>
+        <result column="last_update_by" property="lastUpdateBy"/>
+        <result column="create_by" property="createBy"/>
+        <result column="channel_template_id" property="channelTemplateId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        ,
+        display_name, channel_id, account_id, content, type, status, create_time, last_update_time, template_number, deleted, reason, params, scene_description, last_update_by, create_by, channel_template_id
+    </sql>
+
+    <select id="getFlashSmTemplateForDeliver" resultMap="BaseResultMap">
+        SELECT sms_t.*
+        FROM flash_sm_template AS sms_t
+                 LEFT JOIN account acc ON acc.ID = sms_t.account_id
+            AND acc.status = 1
+            AND acc.deleted = 0
+        WHERE sms_t.status = 1
+          AND sms_t.deleted = 0
+          AND sms_t.template_number = #{templateNum,jdbcType=VARCHAR}
+          AND acc.bill_account_id = #{accountId,jdbcType=VARCHAR} LIMIT 1
+    </select>
+
+</mapper>

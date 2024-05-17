@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.support.mapper.MiddleNumberBindLogMapper">
+    <select id="getExpiredLogs" resultType="com.m7.abs.common.domain.entity.MiddleNumberBindLogEntity">
+        SELECT
+        *
+        FROM
+        middle_number_bind_log
+        WHERE
+        status = 'BINDING'
+        AND expire_time &lt; now()
+        ORDER BY create_time DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getInvalidLogs" resultType="com.m7.abs.common.domain.entity.MiddleNumberBindLogEntity">
+        SELECT
+        *
+        FROM
+            middle_number_bind_log
+        WHERE
+            ( status = 'UNBIND' OR status = 'EXPIRED' )
+          AND last_update_time IS NOT NULL
+          AND EXTRACT ( EPOCH FROM ( CAST ( now( ) AS TIMESTAMP ) - CAST ( last_update_time AS TIMESTAMP ) ) ) &gt; #{timeLimit}
+        ORDER BY
+            create_time DESC
+            LIMIT #{limit}
+    </select>
+
+    <update id="updateBatchById">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update middle_number_bind_log
+            <set>
+                <if test="item.status != null and item.status != ''">
+                    status = #{item.status},
+                </if>
+                <if test="item.lastUpdateTime != null">
+                    last_update_time = #{item.lastUpdateTime},
+                </if>
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+</mapper>

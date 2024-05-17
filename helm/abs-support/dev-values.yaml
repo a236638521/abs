@@ -1,0 +1,31 @@
+image:
+  repository: harbor-test.7moor.com:8443/tonghua/abs-support
+  tag: ""
+
+env:
+  - name: JAVA_OPTIONS
+    value: "-Xshareclasses -Xquickstart"
+  - name: NACOS_DISCOVERY_ADDR
+    value: http://nacos-cs.tonghua:8848
+  - name: NACOS_CONFIG_ADDR
+    value: http://nacos-cs.tonghua:8848
+  - name: NACOS_CONFIG_GROUP
+    value: dev
+  - name: NACOS_PROFILES_ACTIVE
+    value: dev
+
+service:
+  type: ClusterIP
+  port: 35603
+ingress:
+  enabled: true
+  annotations: { }
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: dev-v7-abs-support.7moor.com
+      paths: [ "/api" ]
+  tls: [ ]
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

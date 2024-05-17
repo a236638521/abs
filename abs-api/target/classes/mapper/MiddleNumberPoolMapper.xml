@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.api.mapper.MiddleNumberPoolMapper">
+    <select id="getByAccountAndTelX"  resultType="com.m7.abs.api.domain.dto.midNum.MiddleNumberPoolDto">
+        SELECT
+            mnp.account_id,
+            mnp.type,
+            mnp.channel_id,
+            mnp.area_code
+        FROM
+            middle_number_pool AS mnp
+        LEFT JOIN account AS a ON a.id=mnp.account_id
+        WHERE
+            mnp.status = 1
+            AND
+            mnp.deleted = 0
+            AND
+            a.status = 1
+            AND
+            a.deleted = 0
+            AND
+            a.bill_account_id = #{account}
+            AND
+            mnp.number = #{number}
+        LIMIT 1
+    </select>
+</mapper>

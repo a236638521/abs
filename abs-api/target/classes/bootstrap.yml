@@ -1,0 +1,49 @@
+server:
+  port: ${SERVER_PORT:35601}
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /api
+    servlet-path: /
+
+spring:
+  application:
+    name: abs-api-${NACOS_PROFILES_ACTIVE}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_ADDR}
+        weight: ${NACOS_DISCOVERY_WEIGHT}
+        namespace: ${NACOS_DISCOVERY_NAME_SPACE}
+        heart-beat-interval: 1000 #心跳间隔。单位为毫秒。
+        heart-beat-timeout: 3000 #心跳暂停。单位为毫秒。
+        ip-delete-timeout: 6000 #Ip删除超时。单位为毫秒。
+      config:
+        server-addr: ${NACOS_CONFIG_ADDR}
+        group: ${NACOS_CONFIG_GROUP}
+        file-extension: yml
+        namespace: ${NACOS_DISCOVERY_NAME_SPACE}
+  profiles:
+    active: ${NACOS_PROFILES_ACTIVE}
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: ready
+      exposure:
+        include: health,info,metrics,prometheus,beans,caches,loggers,threaddump,env
+  endpoint:
+    health:
+      show-details: always
+
+feign:
+  hystrix:
+    enabled: false
+  httpclient:
+    connection-timeout: 10000
+  client:
+    config:
+      default:
+        retryer: feign.Retryer.Default

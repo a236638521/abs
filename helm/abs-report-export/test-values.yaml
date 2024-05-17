@@ -1,0 +1,50 @@
+image:
+  repository: harbor-test.7moor.com:8443/tonghua/abs-report-export
+  tag: ""
+
+env:
+  - name: JAVA_OPTIONS
+    value: "-Xshareclasses -Xquickstart"
+  - name: NACOS_DISCOVERY_ADDR
+    value: http://nacos-cs.tonghua:8848
+  - name: NACOS_CONFIG_ADDR
+    value: http://nacos-cs.tonghua:8848
+  - name: NACOS_CONFIG_GROUP
+    value: beta
+  - name: NACOS_PROFILES_ACTIVE
+    value: beta
+  - name: NACOS_DISCOVERY_WEIGHT
+    value: "1"
+  - name: NACOS_DISCOVERY_NAME_SPACE
+    value: "cba40065-318e-4e7a-ace7-896c88c9a13b"
+
+resources:
+  limits:
+    cpu: 2
+    memory: 4096Mi
+  requests:
+    cpu: 0.2
+    memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 800
+  targetMemoryUtilizationPercentage: 800
+
+service:
+  type: ClusterIP
+  port: 35605
+ingress:
+  enabled: true
+  annotations: { }
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: test-v7-abs-report-export.7moor.com
+      paths: [ "/api" ]
+  tls: [ ]
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

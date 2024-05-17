@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.admin.sys.mapper.SysMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.m7.abs.common.domain.entity.SysMenuEntity">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="url" property="url"/>
+        <result column="perms" property="perms"/>
+        <result column="type" property="type"/>
+        <result column="icon" property="icon"/>
+        <result column="order_num" property="orderNum"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_update_by" property="lastUpdateBy"/>
+        <result column="last_update_time" property="lastUpdateTime"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, parent_id, url, perms, type, icon, order_num, create_by, create_time, last_update_by, last_update_time, status
+    </sql>
+
+    <select id="findByUserName" resultMap="BaseResultMap">
+        SELECT
+        m.*
+        FROM
+        sys_menu m,
+        sys_user u,
+        sys_user_role ur,
+        sys_role_menu rm
+        WHERE
+        m.status = 0
+        AND u.username = #{userName}
+        <if test="onlyMenu!=null and onlyMenu">
+            AND (m.type = 0 OR m.type = 1)
+        </if>
+
+        <choose>
+            <when test="projectId!=null and projectId!=''">
+                AND (m.project_id IS NULL OR m.project_id = #{projectId} OR m.project_id = '')
+            </when>
+            <otherwise>
+                AND (m.project_id IS NULL OR m.project_id = '')
+            </otherwise>
+        </choose>
+
+        AND u.id = ur.user_id
+        AND ur.role_id = rm.role_id
+        AND rm.menu_id = m.id
+    </select>
+
+
+    <select id="findAllByUserName" resultMap="BaseResultMap">
+        SELECT
+        m.*
+        FROM
+        sys_menu m,
+        sys_user u,
+        sys_user_role ur,
+        sys_role_menu rm
+        WHERE
+        m.status = 0
+        AND u.username = #{userName}
+        <if test="onlyMenu!=null and onlyMenu">
+            AND (m.type = 0 OR m.type = 1)
+        </if>
+        AND u.id = ur.user_id
+        AND ur.role_id = rm.role_id
+        AND rm.menu_id = m.id
+    </select>
+
+    <select id="findRoleMenus" parameterType="java.lang.String" resultMap="BaseResultMap">
+       SELECT
+        m.*
+    FROM
+        sys_menu m,
+        sys_role_menu rm
+    WHERE
+        rm.role_id = #{roleId}
+        AND m.id = rm.menu_id
+  </select>
+
+</mapper>

@@ -1,0 +1,36 @@
+server:
+  port: ${SERVER_PORT:35603}
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /support
+
+spring:
+  datasource:
+    dynamic:
+      strict: true
+  application:
+    name: abs-support-${NACOS_PROFILES_ACTIVE}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_ADDR}
+        weight: ${NACOS_DISCOVERY_WEIGHT}
+        namespace: ${NACOS_DISCOVERY_NAME_SPACE}
+      config:
+        server-addr: ${NACOS_CONFIG_ADDR}
+        group: ${NACOS_CONFIG_GROUP}
+        file-extension: yml
+        namespace: ${NACOS_DISCOVERY_NAME_SPACE}
+  profiles:
+    active: ${NACOS_PROFILES_ACTIVE}
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: ready
+      exposure:
+        include: health,info,metrics,prometheus
+

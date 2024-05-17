@@ -1,0 +1,18 @@
+{{- if .Values.prometheus.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "abs-api.fullname" . }}
+  labels:
+    {{- include "abs-api.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - port: {{ .Values.prometheus.port | default "http" }}
+    path: {{ .Values.prometheus.path | default "/prometheus" }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace}}
+  selector:
+    matchLabels:
+      {{- include "abs-api.selectorLabels" . | nindent 6 }}
+{{- end }}

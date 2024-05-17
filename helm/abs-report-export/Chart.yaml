@@ -1,0 +1,9 @@
+apiVersion: v2
+name: abs-report-export
+description: A Helm chart for Kubernetes
+type: application
+
+version: v7
+appVersion: v7
+
+home: https://git.7moor.com/7moor-codes/v7/tonghua/abs

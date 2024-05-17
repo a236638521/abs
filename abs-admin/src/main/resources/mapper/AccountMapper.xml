@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.m7.abs.admin.mapper.AccountMapper">
+
+    <select id="findByPage" resultType="com.m7.abs.admin.domain.dto.AccountPageDTO">
+        SELECT
+        account.*,
+        enterprise.name AS enterpriseName
+        FROM
+        account account
+        LEFT JOIN enterprise enterprise ON account.enterprise_id = enterprise.id AND account.deleted = 0
+        <where>
+            account.deleted = 0
+            <if test="ew.emptyOfWhere == false">
+                AND ${ew.sqlSegment}
+            </if>
+        </where>
+        ORDER BY
+        account.create_time DESC
+    </select>
+
+</mapper>
